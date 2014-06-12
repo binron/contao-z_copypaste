@@ -1,0 +1,158 @@
+<div id="tl_buttons">
+	<a href="<?php echo $this->backHref; ?>" class="header_back">
+		<?php echo $this->back; ?>
+	</a>
+</div>
+
+<div class="maintenance_inactive" style="margin-top:0">
+	<h2 class="sub_headline">
+		<?php echo $this->exportHeadline; ?>
+	</h2>
+	
+	<form action="<?php echo $this->action; ?>" class="tl_form" method="post">
+		<div class="tl_formbody_edit">
+			<input type="hidden" name="FORM_SUBMIT" value="tl_export">
+			<input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN; ?>">
+			<div class="tl_tbox" style="overflow:hidden">
+				<div class="w50">
+					<h3>
+						<label for="ctrl_pageAlias"<?php if ($this->exportError=='pageAlias'): ?> class="error"<?php endif; ?>>
+							<?php echo $this->exportPageAlias; ?>
+						</label>
+					</h3>
+					<input type="text" id="ctrl_pageAlias" name="pageAlias" value="de/home" class="tl_text">
+					<?php if ($this->exportError=='pageAlias'): ?>
+						<p class="tl_error tl_tip">
+							<?php echo $this->exportErrorText; ?>
+						</p>
+					<?php else: ?>
+						<?php if ($GLOBALS['TL_CONFIG']['showHelp']): ?>
+							<p class="tl_help tl_tip">
+								<?php echo $this->exportPageAliasHelp; ?>
+							</p>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+				<div class="w50 m12 cbx">
+					<div class="tl_checkbox_single_container">
+						<input type="hidden" name="recursive" value="">
+						<input type="checkbox" id="ctrl_recursive" name="recursive" value="1" class="tl_checkbox" checked>
+						<label for="ctrl_recursive">
+							<?php echo $this->exportRecursive; ?>
+						</label>
+					</div>
+					<?php if ($GLOBALS['TL_CONFIG']['showHelp']): ?>
+						<p class="tl_help tl_tip">
+							<?php echo $this->exportRecursiveHelp; ?>
+						</p>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		<div class="tl_submit_container">
+			<input type="submit" class="tl_submit" value="<?php echo $this->exportSubmit; ?>"> 
+		</div>
+	</form>
+	
+	<?php if ($this->exportInfo): ?>
+		<div class="tl_message z_copypaste">
+			<a href="<?php echo $this->exportDataUrl; ?>" target="_blank">
+				<?php echo $this->exportDataTitle; ?>
+			</a>
+			<ul>
+				<?php function exportInfo($arrPageInfo) { ?>
+					<li>
+						<?php echo $arrPageInfo['data']['title']; ?>
+						<?php if ($arrPageInfo['pages']): ?>
+							<ul>
+								<?php foreach ($arrPageInfo['pages'] as $arrSubPageInfo): ?>
+									<?php exportInfo($arrSubPageInfo); ?>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</li>
+				<?php } ?>
+				<?php exportInfo($this->exportInfo); ?>
+			</ul>
+		</div>
+	<?php endif; ?>
+</div>
+
+<div class="maintenance_inactive">
+	<h2 class="sub_headline">
+		<?php echo $this->importHeadline; ?>
+	</h2>
+
+	<form action="<?php echo $this->action; ?>" class="tl_form" method="post" enctype="multipart/form-data">
+		<div class="tl_formbody_edit">
+			<input type="hidden" name="FORM_SUBMIT" value="tl_import">
+			<input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN; ?>">
+			<div class="tl_tbox" style="overflow:hidden">
+				<div class="w50">
+					<h3>
+						<label for="ctrl_pageAlias2"<?php if ($this->importError=='pageAlias'): ?> class="error"<?php endif; ?>>
+							<?php echo $this->importPageAlias; ?>
+						</label>
+					</h3>
+					<input type="text" id="ctrl_pageAlias2" name="pageAlias" value="de" class="tl_text">
+					<?php if ($this->importError=='pageAlias'): ?>
+						<p class="tl_error tl_tip">
+							<?php echo $this->importErrorText; ?>
+						</p>
+					<?php else: ?>
+						<?php if ($GLOBALS['TL_CONFIG']['showHelp']): ?>
+							<p class="tl_help tl_tip">
+								<?php echo $this->importPageAliasHelp; ?>
+							</p>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+				<div class="w50">
+					<h3>
+						<label for="ctrl_data"<?php if ($this->importError=='data'): ?> class="error"<?php endif; ?>>
+							<?php echo $this->importData; ?>
+						</label>
+					</h3>
+					<input type="file" id="ctrl_data" name="data" class="tl_upload_field">
+					<?php if ($this->importError=='data'): ?>
+						<p class="tl_error tl_tip">
+							<?php echo $this->importErrorText; ?>
+						</p>
+					<?php else: ?>
+						<?php if ($GLOBALS['TL_CONFIG']['showHelp']): ?>
+							<p class="tl_help tl_tip">
+								<?php echo $this->importDataHelp; ?>
+							</p>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		<div class="tl_submit_container">
+			<input type="submit" class="tl_submit" value="<?php echo $this->importSubmit; ?>"> 
+		</div>
+	</form>
+	
+	<?php if ($this->importInfo): ?>
+		<div class="tl_message z_copypaste">
+			<p>
+				<?php echo $this->importInfoText; ?>
+			</p>
+			<ul>
+				<?php function importInfo($arrPageInfo) { ?>
+					<li>
+						<?php echo $arrPageInfo['data']['title']; ?>
+						<?php if ($arrPageInfo['pages']): ?>
+							<ul>
+								<?php foreach ($arrPageInfo['pages'] as $arrSubPageInfo): ?>
+									<?php importInfo($arrSubPageInfo); ?>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</li>
+				<?php } ?>
+				<?php importInfo($this->importInfo); ?>
+			</ul>
+		</div>
+	<?php endif; ?>
+</div>
